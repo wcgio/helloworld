@@ -1,12 +1,7 @@
-name: Build x86-64 (Manual)
+name: Build x86-64 (No xray-plugin)
 
 on:
   workflow_dispatch:  # 手动触发
-    inputs:
-      packages:
-        description: '要编译的包（默认 luci-app-ssr-plus）'
-        required: false
-        default: 'luci-app-ssr-plus'
 
 jobs:
   build:
@@ -36,7 +31,9 @@ jobs:
           FEEDNAME: packages_ci
           V: s
           target: x86-64
-          packages: ${{ github.event.inputs.packages || 'luci-app-ssr-plus' }}
+          packages: luci-app-ssr-plus
+          # 排除 xray-plugin（有兼容性问题）
+          IGNORE_ERRORS: xray-plugin
 
       - name: Move created packages to project dir
         run: cp bin/packages/x86_64/packages_ci/*.ipk . || true
