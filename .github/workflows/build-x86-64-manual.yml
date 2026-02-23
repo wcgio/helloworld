@@ -34,6 +34,7 @@ jobs:
           packages: luci-app-ssr-plus
           # 排除 xray-plugin（有兼容性问题）
           IGNORE_ERRORS: xray-plugin
+          branch: openwrt-22.03
 
       - name: Move created packages to project dir
         run: cp bin/packages/x86_64/packages_ci/*.ipk . || true
