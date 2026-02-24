@@ -108,7 +108,9 @@ jobs:
           packages: ${{ env.PACKAGES }}
 
       - name: Move created packages to project dir
-        run: cp bin/packages/${{ matrix.arch }}/packages_ci/*.ipk . || true
+        run: |
+          cp bin/packages/${{ matrix.arch }}/packages_ci/*.ipk . 2>/dev/null || true
+          cp bin/packages/${{ matrix.arch }}/packages_ci/*.apk . 2>/dev/null || true
 
       - name: Collect metadata
         run: |
@@ -133,8 +135,8 @@ jobs:
       - name: Generate metadata
         run: |
           shopt -s nullglob
-          IPKS=( *.ipk )
-          
+          IPKS=( *.ipk *.apk )
+
           cat << EOF > PKG-INFO
           Metadata-Version: 2.1
           Name: ${{ env.ARCHIVE_NAME }}
@@ -176,6 +178,7 @@ jobs:
             Packages
             Packages.*
             *.ipk
+            *.apk
             PKG-INFO
 
       - name: Store logs
